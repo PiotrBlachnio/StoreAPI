@@ -38,5 +38,7 @@ namespace Store.Data
 
             _context.Items.Add(item);
         }
+
+        public void UpdateItem(Item item) {}
     }
 }

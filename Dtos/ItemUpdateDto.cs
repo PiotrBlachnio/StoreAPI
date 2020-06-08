@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Store.Dtos
 {
-    public class ItemCreateDto
+    public class ItemUpdateDto
     {
         [Required]
         public string Name { get; set; }

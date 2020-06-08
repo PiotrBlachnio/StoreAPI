@@ -57,5 +57,23 @@ namespace Items.Controllers
 
             return CreatedAtRoute(nameof(GetItemById), new { Id = ItemReadDto.Id }, ItemReadDto);
         }
+
+        // PUT api/items/{id}
+        [HttpPut("{id}")]
+        public ActionResult UpdateItem(int id, ItemUpdateDto itemUpdateDto)
+        {
+            var item = _repository.GetItemById(id);
+
+            if(item == null)
+            {
+                return NotFound();
+            }
+
+            _mapper.Map(itemUpdateDto, item);
+            _repository.UpdateItem(item);
+
+            _repository.SaveChanges();
+            return NoContent();
+        }
     }
 }
