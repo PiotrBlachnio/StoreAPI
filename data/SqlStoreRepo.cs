@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Store.Models;
@@ -26,6 +27,16 @@ namespace Store.Data
         public Item GetItemById(int id)
         {
             return _context.Items.FirstOrDefault(p => p.Id == id);
+        }
+
+        public void CreateItem(Item item)
+        {
+            if(item == null)
+            {
+                throw new ArgumentNullException(nameof(item));
+            }
+
+            _context.Items.Add(item);
         }
     }
 }

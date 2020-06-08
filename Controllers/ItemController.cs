@@ -3,6 +3,7 @@ using AutoMapper;
 using Store.Data;
 using System.Collections.Generic;
 using Store.Dtos;
+using Store.Models;
 
 namespace Items.Controllers
 {
@@ -30,7 +31,7 @@ namespace Items.Controllers
         }
 
         // GET api/items/{id}
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetItemById")]
         public ActionResult <ItemReadDto> GetItemById(int id)
         {
             var item = _repository.GetItemById(id);
@@ -41,6 +42,20 @@ namespace Items.Controllers
             }
             
             return Ok(_mapper.Map<ItemReadDto>(item));
+        }
+
+        // POST api/items
+        [HttpPost]
+        public ActionResult <ItemReadDto> CreateItem(ItemCreateDto itemCreateDto)
+        {
+            var itemModel = _mapper.Map<Item>(itemCreateDto);
+
+            _repository.CreateItem(itemModel);
+            _repository.SaveChanges();
+
+            var ItemReadDto = _mapper.Map<ItemReadDto>(itemModel);
+
+            return CreatedAtRoute(nameof(GetItemById), new { Id = ItemReadDto.Id }, ItemReadDto);
         }
     }
 }

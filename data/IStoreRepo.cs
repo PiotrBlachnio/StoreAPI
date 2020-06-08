@@ -9,5 +9,6 @@ namespace Store.Data
 
         IEnumerable<Item> GetAllItems();
         Item GetItemById(int id);
+        void CreateItem(Item item);
     }
 }
