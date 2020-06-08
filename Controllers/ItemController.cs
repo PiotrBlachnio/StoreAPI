@@ -1,6 +1,8 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
 using Store.Data;
+using System.Collections.Generic;
+using Store.Dtos;
 
 namespace Items.Controllers {
 
@@ -14,8 +16,13 @@ namespace Items.Controllers {
             _repository = repository;
             _mapper = mapper;
         }
-    }
 
-    [HttpGet]
-    public ActionResult <IEnumerable
+        // GET api/items
+        [HttpGet]
+        public ActionResult <IEnumerable<ItemReadDto>> GetAllItems() {
+            var items = _repository.GetAllItems();
+
+            return Ok(_mapper.Map<IEnumerable<ItemReadDto>>(items));
+        }
+    }
 }
