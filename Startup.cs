@@ -5,6 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Store.Data;
+using AutoMapper;
+using System;
 
 namespace Store
 {
@@ -21,6 +23,9 @@ namespace Store
         {
             services.AddDbContext<StoreContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("StoreConnection")));
             services.AddControllers();
+
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddScoped<IStoreRepo, SqlStoreRepo>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
