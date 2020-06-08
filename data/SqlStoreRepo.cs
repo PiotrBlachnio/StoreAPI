@@ -22,5 +22,10 @@ namespace Store.Data
         {
             return _context.Items.ToList();
         }
+
+        public Item GetItemById(int id)
+        {
+            return _context.Items.FirstOrDefault(p => p.Id == id);
+        }
     }
 }

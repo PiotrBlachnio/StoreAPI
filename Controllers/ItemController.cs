@@ -28,5 +28,19 @@ namespace Items.Controllers
 
             return Ok(_mapper.Map<IEnumerable<ItemReadDto>>(items));
         }
+
+        // GET api/items/{id}
+        [HttpGet("{id}")]
+        public ActionResult <ItemReadDto> GetItemById(int id)
+        {
+            var item = _repository.GetItemById(id);
+
+            if(item == null)
+            {
+                return NotFound();
+            }
+            
+            return Ok(_mapper.Map<ItemReadDto>(item));
+        }
     }
 }

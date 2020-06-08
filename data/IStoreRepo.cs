@@ -8,5 +8,6 @@ namespace Store.Data
         bool SaveChanges();
 
         IEnumerable<Item> GetAllItems();
+        Item GetItemById(int id);
     }
 }
