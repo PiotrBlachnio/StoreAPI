@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.EntityFrameworkCore;
+using Store.Data;
 
 namespace Store
 {
@@ -17,6 +19,7 @@ namespace Store
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<StoreContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("StoreConnection")));
             services.AddControllers();
         }
         
