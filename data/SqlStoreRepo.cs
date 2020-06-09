@@ -40,5 +40,15 @@ namespace Store.Data
         }
 
         public void UpdateItem(Item item) {}
+
+        public void DeleteItem(Item item)
+        {
+            if(item == null)
+            {
+                throw new ArgumentException(nameof(item));
+            }
+
+            _context.Items.Remove(item);
+        }
     }
 }
