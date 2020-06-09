@@ -4,6 +4,7 @@ using Store.Data;
 using System.Collections.Generic;
 using Store.Dtos;
 using Store.Models;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Items.Controllers
 {
@@ -73,6 +74,34 @@ namespace Items.Controllers
             _repository.UpdateItem(item);
 
             _repository.SaveChanges();
+            return NoContent();
+        }
+
+        // PATCH api/items/{id}
+        [HttpPatch("{id}")]
+        public  ActionResult PartialItemUpdate(int id, JsonPatchDocument<ItemUpdateDto> patchDocument)
+        {
+            var item = _repository.GetItemById(id);
+
+            if(item == null)
+            {
+                return NotFound();
+            }
+
+            var itemToPatch = _mapper.Map<ItemUpdateDto>(item);
+
+            patchDocument.ApplyTo(itemToPatch, ModelState);
+
+            if(!TryValidateModel(itemToPatch))
+            {
+                return ValidationProblem(ModelState);
+            }
+
+            _mapper.Map(itemToPatch, item);
+
+            _repository.UpdateItem(item);
+            _repository.SaveChanges();
+
             return NoContent();
         }
     }

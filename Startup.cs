@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Store.Data;
 using AutoMapper;
 using System;
+using Newtonsoft.Json.Serialization;
 
 namespace Store
 {
@@ -22,7 +23,9 @@ namespace Store
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<StoreContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("StoreConnection")));
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson(s => {
+                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+            });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IStoreRepo, SqlStoreRepo>();
