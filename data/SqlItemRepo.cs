@@ -5,11 +5,11 @@ using Store.Models;
 
 namespace Store.Data
 {
-    public class SqlStoreRepo: IStoreRepo
+    public class SqlItemRepo: IItemRepo
     {
         private readonly StoreContext _context;
 
-        public SqlStoreRepo(StoreContext context)
+        public SqlItemRepo(StoreContext context)
         {
             _context = context;
         }

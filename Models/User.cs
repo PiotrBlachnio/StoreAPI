@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Store.Model
+namespace Store.Models
 {
     public class User
     {

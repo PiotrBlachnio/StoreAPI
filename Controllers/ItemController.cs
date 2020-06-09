@@ -14,10 +14,10 @@ namespace Items.Controllers
     [ApiController]
     public class ItemsController: ControllerBase 
     {
-        private readonly IStoreRepo _repository;
+        private readonly IItemRepo _repository;
         private readonly IMapper _mapper;
 
-        public ItemsController(IStoreRepo repository, IMapper mapper) 
+        public ItemsController(IItemRepo repository, IMapper mapper) 
         {
             _repository = repository;
             _mapper = mapper;

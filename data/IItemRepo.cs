@@ -3,7 +3,7 @@ using Store.Models;
 
 namespace Store.Data 
 {
-    public interface IStoreRepo
+    public interface IItemRepo
     {
         bool SaveChanges();
 

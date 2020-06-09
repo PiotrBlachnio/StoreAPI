@@ -28,7 +28,7 @@ namespace Store
             });
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<IStoreRepo, SqlStoreRepo>();
+            services.AddScoped<IItemRepo, SqlItemRepo>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
