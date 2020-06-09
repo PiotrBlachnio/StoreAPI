@@ -18,9 +18,8 @@ namespace Store.Controllers
     {
         private readonly IItemService _itemService;
         private readonly IMapper _mapper;
-        private readonly AbstractValidator<Item> _validator;
 
-        public ItemsController(IItemService itemService, IMapper mapper, AbstractValidator<Item> validator) 
+        public ItemsController(IItemService itemService, IMapper mapper) 
         {
 
             //TODO: Services instead of repositories
@@ -28,7 +27,6 @@ namespace Store.Controllers
             //TODO: Implement DTO's from contracts
             _itemService = itemService;
             _mapper = mapper;
-            _validator = validator;
         }
 
         // GET api/v1/items
@@ -59,18 +57,6 @@ namespace Store.Controllers
         public ActionResult <ItemReadDto> CreateItem(ItemCreateDto input)
         {
             var item = _mapper.Map<Item>(input);
-
-            ValidationResult results = _validator.Validate(item);
-
-            if(!results.IsValid)
-            {
-                foreach(var failure in results.Errors)
-                {
-                    Console.WriteLine("Property" + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
-
-                    return BadRequest(new { msg = failure.ErrorMessage });
-                }
-            }
 
             _itemService.CreateItem(item);
             _itemService.SaveChanges();
