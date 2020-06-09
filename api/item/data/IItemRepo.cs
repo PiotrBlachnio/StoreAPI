@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Store.Models;
+using Store.Database.Models;
 
-namespace Store.Data 
+namespace Store.Data
 {
     public interface IItemRepo
     {

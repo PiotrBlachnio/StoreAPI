@@ -1,6 +1,6 @@
 using AutoMapper;
 using Store.Dtos;
-using Store.Models;
+using Store.Database.Models;
 
 namespace Store.Profiles
 {

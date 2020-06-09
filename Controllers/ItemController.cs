@@ -3,7 +3,7 @@ using AutoMapper;
 using Store.Data;
 using System.Collections.Generic;
 using Store.Dtos;
-using Store.Models;
+using Store.Database.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using System;
 

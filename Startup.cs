@@ -8,6 +8,7 @@ using Store.Data;
 using AutoMapper;
 using System;
 using Newtonsoft.Json.Serialization;
+using Store.Database;
 
 namespace Store
 {

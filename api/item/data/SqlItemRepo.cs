@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Store.Models;
+using Store.Database;
+using Store.Database.Models;
 
 namespace Store.Data
 {
