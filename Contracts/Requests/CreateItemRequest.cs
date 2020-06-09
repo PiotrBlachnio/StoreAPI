@@ -1,4 +1,4 @@
-namespace Store.Contracts.V1.Requests
+namespace Store.Contracts.Requests
 {
     public class CreateItemRequest
     {

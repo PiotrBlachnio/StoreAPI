@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.JsonPatch;
 using FluentValidation;
 using FluentValidation.Results;
 using System;
+using Store.Contracts;
 
-namespace Items.Controllers
+namespace Store.Controllers
 {
-    [Route("/api/items")]
     [ApiController]
-    public class ItemsController: ControllerBase 
+    [Produces("application/json")]
+    public class ItemsController : ControllerBase 
     {
         private readonly IItemRepo _repository;
         private readonly IMapper _mapper;
@@ -21,13 +22,16 @@ namespace Items.Controllers
 
         public ItemsController(IItemRepo repository, IMapper mapper, AbstractValidator<Item> validator) 
         {
+
+            //TODO: Services instead of repositories
+            //TODO: Get instead of getByID
             _repository = repository;
             _mapper = mapper;
             _validator = validator;
         }
 
         // GET api/items
-        [HttpGet]
+        [HttpGet(ApiRoutes.Items.GetAll)]
         public ActionResult <IEnumerable<ItemReadDto>> GetAllItems() 
         {
             var items = _repository.GetAllItems();
@@ -36,8 +40,8 @@ namespace Items.Controllers
         }
 
         // GET api/items/{id}
-        [HttpGet("{id}", Name = "GetItemById")]
-        public ActionResult <ItemReadDto> GetItemById(int id)
+        [HttpGet(ApiRoutes.Items.Get, Name = "Get")]
+        public ActionResult <ItemReadDto> Get(int id)
         {
             var item = _repository.GetItemById(id);
 
@@ -50,7 +54,7 @@ namespace Items.Controllers
         }
 
         // POST api/items
-        [HttpPost]
+        [HttpPost(ApiRoutes.Items.Create)]
         public ActionResult <ItemReadDto> CreateItem(ItemCreateDto input)
         {
             var item = _mapper.Map<Item>(input);
@@ -72,11 +76,11 @@ namespace Items.Controllers
 
             var output = _mapper.Map<ItemReadDto>(item);
 
-            return CreatedAtRoute(nameof(GetItemById), new { Id = output.Id }, output);
+            return CreatedAtRoute(nameof(Get), new { Id = output.Id }, output);
         }
 
         // PUT api/items/{id}
-        [HttpPut("{id}")]
+        [HttpPut(ApiRoutes.Items.Update)]
         public ActionResult UpdateItem(int id, ItemUpdateDto itemUpdateDto)
         {
             var item = _repository.GetItemById(id);
@@ -94,7 +98,7 @@ namespace Items.Controllers
         }
 
         // PATCH api/items/{id}
-        [HttpPatch("{id}")]
+        [HttpPatch(ApiRoutes.Items.PartialUpdate)]
         public  ActionResult PartialItemUpdate(int id, JsonPatchDocument<ItemUpdateDto> patchDocument)
         {
             var item = _repository.GetItemById(id);
@@ -122,7 +126,7 @@ namespace Items.Controllers
         }
 
         // DELETE api/items/{id}
-        [HttpDelete("{id}")]
+        [HttpDelete(ApiRoutes.Items.Delete)]
         public ActionResult DeleteItem(int id)
         {
             var item = _repository.GetItemById(id);

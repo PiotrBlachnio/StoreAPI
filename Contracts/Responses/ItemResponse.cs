@@ -1,4 +1,4 @@
-namespace Store.Contracts.V1.Responses
+namespace Store.Contracts.Responses
 {
     public class ItemResponse
     {

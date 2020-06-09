@@ -1,6 +1,6 @@
-namespace Store.Contracts.V1
+namespace Store.Contracts
 {
-    public static class ApiRotues
+    public static class ApiRoutes
     {
         public const string Root = "api";
 
