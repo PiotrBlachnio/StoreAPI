@@ -9,41 +9,42 @@ using FluentValidation;
 using FluentValidation.Results;
 using System;
 using Store.Contracts;
+using Store.Services;
 
 namespace Store.Controllers
 {
     [Produces("application/json")]
     public class ItemsController : ControllerBase 
     {
-        private readonly IItemRepo _repository;
+        private readonly IItemService _itemService;
         private readonly IMapper _mapper;
         private readonly AbstractValidator<Item> _validator;
 
-        public ItemsController(IItemRepo repository, IMapper mapper, AbstractValidator<Item> validator) 
+        public ItemsController(IItemService itemService, IMapper mapper, AbstractValidator<Item> validator) 
         {
 
             //TODO: Services instead of repositories
             //TODO: Add async methods
             //TODO: Implement DTO's from contracts
-            _repository = repository;
+            _itemService = itemService;
             _mapper = mapper;
             _validator = validator;
         }
 
-        // GET api/items
+        // GET api/v1/items
         [HttpGet(ApiRoutes.Items.GetAll)]
         public ActionResult <IEnumerable<ItemReadDto>> GetAllItems() 
         {
-            var items = _repository.GetAllItems();
+            var items = _itemService.GetAllItems();
 
             return Ok(_mapper.Map<IEnumerable<ItemReadDto>>(items));
         }
 
-        // GET api/items/{id}
+        // GET api/v1/items/{id}
         [HttpGet(ApiRoutes.Items.Get, Name = "Get")]
         public ActionResult <ItemReadDto> Get(int id)
         {
-            var item = _repository.GetItem(id);
+            var item = _itemService.GetItem(id);
 
             if(item == null)
             {
@@ -53,7 +54,7 @@ namespace Store.Controllers
             return Ok(_mapper.Map<ItemReadDto>(item));
         }
 
-        // POST api/items
+        // POST api/v1/items
         [HttpPost(ApiRoutes.Items.Create)]
         public ActionResult <ItemReadDto> CreateItem(ItemCreateDto input)
         {
@@ -71,19 +72,19 @@ namespace Store.Controllers
                 }
             }
 
-            _repository.CreateItem(item);
-            _repository.SaveChanges();
+            _itemService.CreateItem(item);
+            _itemService.SaveChanges();
 
             var output = _mapper.Map<ItemReadDto>(item);
 
             return CreatedAtRoute(nameof(Get), new { Id = output.Id }, output);
         }
 
-        // PUT api/items/{id}
+        // PUT api/v1/items/{id}
         [HttpPut(ApiRoutes.Items.Update)]
         public ActionResult UpdateItem(int id, ItemUpdateDto itemUpdateDto)
         {
-            var item = _repository.GetItem(id);
+            var item = _itemService.GetItem(id);
 
             if(item == null)
             {
@@ -91,17 +92,17 @@ namespace Store.Controllers
             }
 
             _mapper.Map(itemUpdateDto, item);
-            _repository.UpdateItem(item);
+            _itemService.UpdateItem(item);
 
-            _repository.SaveChanges();
+            _itemService.SaveChanges();
             return NoContent();
         }
 
-        // PATCH api/items/{id}
+        // PATCH api/v1/items/{id}
         [HttpPatch(ApiRoutes.Items.PartialUpdate)]
         public  ActionResult PartialItemUpdate(int id, JsonPatchDocument<ItemUpdateDto> patchDocument)
         {
-            var item = _repository.GetItem(id);
+            var item = _itemService.GetItem(id);
 
             if(item == null)
             {
@@ -119,25 +120,25 @@ namespace Store.Controllers
 
             _mapper.Map(itemToPatch, item);
 
-            _repository.UpdateItem(item);
-            _repository.SaveChanges();
+            _itemService.UpdateItem(item);
+            _itemService.SaveChanges();
 
             return NoContent();
         }
 
-        // DELETE api/items/{id}
+        // DELETE api/v1/items/{id}
         [HttpDelete(ApiRoutes.Items.Delete)]
         public ActionResult DeleteItem(int id)
         {
-            var item = _repository.GetItem(id);
+            var item = _itemService.GetItem(id);
 
             if(item == null)
             {
                 return NotFound();
             }
 
-            _repository.DeleteItem(item);
-            _repository.SaveChanges();
+            _itemService.DeleteItem(item);
+            _itemService.SaveChanges();
 
             return NoContent();
         }
