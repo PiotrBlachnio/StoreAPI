@@ -4,13 +4,13 @@ using System.Linq;
 using Store.Database;
 using Store.Database.Models;
 
-namespace Store.Data
+namespace Store.Services
 {
-    public class SqlItemRepo: IItemRepo
+    public class ItemService : IItemService
     {
         private readonly StoreContext _context;
 
-        public SqlItemRepo(StoreContext context)
+        public ItemService(StoreContext context)
         {
             _context = context;
         }

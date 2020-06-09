@@ -12,7 +12,6 @@ using Store.Contracts;
 
 namespace Store.Controllers
 {
-    [ApiController]
     [Produces("application/json")]
     public class ItemsController : ControllerBase 
     {
@@ -24,7 +23,8 @@ namespace Store.Controllers
         {
 
             //TODO: Services instead of repositories
-            //TODO: Get instead of getByID
+            //TODO: Add async methods
+            //TODO: Implement DTO's from contracts
             _repository = repository;
             _mapper = mapper;
             _validator = validator;
@@ -43,7 +43,7 @@ namespace Store.Controllers
         [HttpGet(ApiRoutes.Items.Get, Name = "Get")]
         public ActionResult <ItemReadDto> Get(int id)
         {
-            var item = _repository.GetItemById(id);
+            var item = _repository.GetItem(id);
 
             if(item == null)
             {
@@ -83,7 +83,7 @@ namespace Store.Controllers
         [HttpPut(ApiRoutes.Items.Update)]
         public ActionResult UpdateItem(int id, ItemUpdateDto itemUpdateDto)
         {
-            var item = _repository.GetItemById(id);
+            var item = _repository.GetItem(id);
 
             if(item == null)
             {
@@ -101,7 +101,7 @@ namespace Store.Controllers
         [HttpPatch(ApiRoutes.Items.PartialUpdate)]
         public  ActionResult PartialItemUpdate(int id, JsonPatchDocument<ItemUpdateDto> patchDocument)
         {
-            var item = _repository.GetItemById(id);
+            var item = _repository.GetItem(id);
 
             if(item == null)
             {
@@ -129,7 +129,7 @@ namespace Store.Controllers
         [HttpDelete(ApiRoutes.Items.Delete)]
         public ActionResult DeleteItem(int id)
         {
-            var item = _repository.GetItemById(id);
+            var item = _repository.GetItem(id);
 
             if(item == null)
             {
