@@ -1,13 +1,9 @@
 using Microsoft.AspNetCore.Mvc;
 using AutoMapper;
-using Store.Data;
 using System.Collections.Generic;
 using Store.Dtos;
 using Store.Database.Models;
 using Microsoft.AspNetCore.JsonPatch;
-using FluentValidation;
-using FluentValidation.Results;
-using System;
 using Store.Contracts;
 using Store.Services;
 

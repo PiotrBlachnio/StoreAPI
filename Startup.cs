@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.EntityFrameworkCore;
-using Store.Data;
-using AutoMapper;
+using System.Linq;
+using Store.Installers;
 using System;
-using Newtonsoft.Json.Serialization;
-using Store.Database;
 
 namespace Store
 {
@@ -23,13 +20,10 @@ namespace Store
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<StoreContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("StoreConnection")));
-            services.AddControllers().AddNewtonsoftJson(s => {
-                s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-            });
+            var installers = typeof(Startup).Assembly.ExportedTypes.Where(x =>
+                typeof(IInstaller).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).Select(Activator.CreateInstance).Cast<IInstaller>().ToList();
 
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-            services.AddScoped<IItemRepo, SqlItemRepo>();
+            installers.ForEach(installer => installer.InstallServices(services, Configuration));
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
