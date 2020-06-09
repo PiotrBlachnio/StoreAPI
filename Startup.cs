@@ -20,10 +20,7 @@ namespace Store
 
         public void ConfigureServices(IServiceCollection services)
         {
-            var installers = typeof(Startup).Assembly.ExportedTypes.Where(x =>
-                typeof(IInstaller).IsAssignableFrom(x) && !x.IsInterface && !x.IsAbstract).Select(Activator.CreateInstance).Cast<IInstaller>().ToList();
-
-            installers.ForEach(installer => installer.InstallServices(services, Configuration));
+            services.InstallServicesInAssembly(Configuration);
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
