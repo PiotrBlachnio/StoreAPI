@@ -5,22 +5,25 @@ using System.Collections.Generic;
 using Store.Dtos;
 using Store.Database.Models;
 using Microsoft.AspNetCore.JsonPatch;
+using FluentValidation;
+using FluentValidation.Results;
 using System;
 
 namespace Items.Controllers
 {
-
     [Route("/api/items")]
     [ApiController]
     public class ItemsController: ControllerBase 
     {
         private readonly IItemRepo _repository;
         private readonly IMapper _mapper;
+        private readonly AbstractValidator<Item> _validator;
 
-        public ItemsController(IItemRepo repository, IMapper mapper) 
+        public ItemsController(IItemRepo repository, IMapper mapper, AbstractValidator<Item> validator) 
         {
             _repository = repository;
             _mapper = mapper;
+            _validator = validator;
         }
 
         // GET api/items
@@ -48,16 +51,28 @@ namespace Items.Controllers
 
         // POST api/items
         [HttpPost]
-        public ActionResult <ItemReadDto> CreateItem(ItemCreateDto itemCreateDto)
+        public ActionResult <ItemReadDto> CreateItem(ItemCreateDto input)
         {
-            var itemModel = _mapper.Map<Item>(itemCreateDto);
+            var item = _mapper.Map<Item>(input);
 
-            _repository.CreateItem(itemModel);
+            ValidationResult results = _validator.Validate(item);
+
+            if(!results.IsValid)
+            {
+                foreach(var failure in results.Errors)
+                {
+                    Console.WriteLine("Property" + failure.PropertyName + " failed validation. Error was: " + failure.ErrorMessage);
+
+                    return BadRequest(new { msg = failure.ErrorMessage });
+                }
+            }
+
+            _repository.CreateItem(item);
             _repository.SaveChanges();
 
-            var ItemReadDto = _mapper.Map<ItemReadDto>(itemModel);
+            var output = _mapper.Map<ItemReadDto>(item);
 
-            return CreatedAtRoute(nameof(GetItemById), new { Id = ItemReadDto.Id }, ItemReadDto);
+            return CreatedAtRoute(nameof(GetItemById), new { Id = output.Id }, output);
         }
 
         // PUT api/items/{id}

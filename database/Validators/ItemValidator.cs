@@ -1,6 +1,7 @@
 using FluentValidation;
+using Store.Database.Models;
 
-namespace Store.Database.Models
+namespace Store.Database.Validators
 {
     public class ItemValidator : AbstractValidator<Item>
     {

@@ -9,6 +9,9 @@ using AutoMapper;
 using System;
 using Newtonsoft.Json.Serialization;
 using Store.Database;
+using Store.Database.Models;
+using Store.Database.Validators;
+using FluentValidation;
 
 namespace Store
 {
@@ -30,6 +33,7 @@ namespace Store
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IItemRepo, SqlItemRepo>();
+            services.AddSingleton<AbstractValidator<Item>, ItemValidator>();
         }
         
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
