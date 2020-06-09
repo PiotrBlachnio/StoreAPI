@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Store.Database;
 using Store.Database.Models;
 
@@ -8,48 +9,48 @@ namespace Store.Services
 {
     public class ItemService : IItemService
     {
-        private readonly StoreContext _context;
+        private readonly DatabaseContext _context;
 
-        public ItemService(StoreContext context)
+        public ItemService(DatabaseContext context)
         {
             _context = context;
         }
 
-        public bool SaveChanges()
+        public async Task<List<Item>> GetAllItemsAsync()
         {
-            return (_context.SaveChanges() >= 0);
+            return await _context.Items.ToListAsync();
         }
 
-        public IEnumerable<Item> GetAllItems()
+        public async Task<Item> GetItemAsync(Guid id)
         {
-            return _context.Items.ToList();
+            return await _context.Items.FirstOrDefaultAsync(p => p.Id == id);
         }
 
-        public Item GetItem(int id)
+        public async Task<bool> CreateItemAsync(Item item)
         {
-            return _context.Items.FirstOrDefault(p => p.Id == id);
+            await _context.Items.AddAsync(item);
+
+            var created = await _context.SaveChangesAsync();
+
+            return created > 0;
         }
 
-        public void CreateItem(Item item)
+        public async Task<bool> UpdateItemAsync(Item item)
         {
-            if(item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            _context.Items.Update(item);
 
-            _context.Items.Add(item);
+            var updated = await _context.SaveChangesAsync();
+
+            return updated > 0;
         }
 
-        public void UpdateItem(Item item) {}
-
-        public void DeleteItem(Item item)
+        public async Task<bool> DeleteItemAsync(Item item)
         {
-            if(item == null)
-            {
-                throw new ArgumentException(nameof(item));
-            }
-
             _context.Items.Remove(item);
+
+            var deleted = await _context.SaveChangesAsync();
+
+            return deleted > 0;
         }
     }
 }

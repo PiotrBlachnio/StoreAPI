@@ -7,7 +7,7 @@ using Store.Database;
 
 namespace Store.Migrations
 {
-    [DbContext(typeof(StoreContext))]
+    [DbContext(typeof(DatabaseContext))]
     [Migration("20200608192141_InitialMigration")]
     partial class InitialMigration
     {

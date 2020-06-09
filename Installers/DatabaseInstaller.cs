@@ -10,7 +10,7 @@ namespace Store.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<StoreContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("StoreConnection")));
+            services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString("StoreConnection")));
             
             services.AddControllers().AddNewtonsoftJson(s => {
                 s.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();

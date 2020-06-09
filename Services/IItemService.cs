@@ -1,20 +1,20 @@
+using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Store.Database.Models;
 
 namespace Store.Services
 {
     public interface IItemService
     {
-        bool SaveChanges();
+        Task<List<Item>> GetAllItemsAsync();
 
-        IEnumerable<Item> GetAllItems();
+        Task<Item> GetItemAsync(Guid id);
 
-        Item GetItem(int id);
+        Task<bool> CreateItemAsync(Item item);
 
-        void CreateItem(Item item);
-
-        void UpdateItem(Item item);
+        Task<bool> UpdateItemAsync(Item item);
         
-        void DeleteItem(Item item);
+        Task<bool> DeleteItemAsync(Item item);
     }
 }

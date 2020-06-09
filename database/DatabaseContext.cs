@@ -3,9 +3,9 @@ using Store.Database.Models;
 
 namespace Store.Database
 {
-    public class StoreContext: DbContext 
+    public class DatabaseContext: DbContext 
     {
-        public StoreContext(DbContextOptions<StoreContext> opt): base(opt) {}
+        public DatabaseContext(DbContextOptions<DatabaseContext> opt): base(opt) {}
 
         public DbSet<Item> Items { get; set; }
 

@@ -6,6 +6,8 @@ using Store.Database.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Store.Contracts;
 using Store.Services;
+using System;
+using System.Threading.Tasks;
 
 namespace Store.Controllers
 {
@@ -21,24 +23,26 @@ namespace Store.Controllers
             //TODO: Add async methods
             //TODO: Implement DTO's from contracts
             //TODO: Add localization for get requests
+            //TODO: Implement save changes in the methods (private)
+            //TODO: Update update service method
             _itemService = itemService;
             _mapper = mapper;
         }
 
         // GET api/v1/items
         [HttpGet(ApiRoutes.Items.GetAll)]
-        public ActionResult <IEnumerable<ItemReadDto>> GetAllItems() 
+        public async Task<ActionResult> GetAllItems() 
         {
-            var items = _itemService.GetAllItems();
+            var items = await _itemService.GetAllItemsAsync();
 
             return Ok(_mapper.Map<IEnumerable<ItemReadDto>>(items));
         }
 
         // GET api/v1/items/{id}
         [HttpGet(ApiRoutes.Items.Get, Name = "Get")]
-        public ActionResult <ItemReadDto> Get([FromRoute] int id)
+        public async Task<ActionResult> Get([FromRoute] Guid id)
         {
-            var item = _itemService.GetItem(id);
+            var item = await _itemService.GetItemAsync(id);
 
             if(item == null)
             {
@@ -50,12 +54,11 @@ namespace Store.Controllers
 
         // POST api/v1/items
         [HttpPost(ApiRoutes.Items.Create)]
-        public ActionResult <ItemReadDto> CreateItem([FromBody] ItemCreateDto input)
+        public async Task<ActionResult> CreateItem([FromBody] ItemCreateDto input)
         {
             var item = _mapper.Map<Item>(input);
 
-            _itemService.CreateItem(item);
-            _itemService.SaveChanges();
+            await _itemService.CreateItemAsync(item);
 
             var output = _mapper.Map<ItemReadDto>(item);
 
@@ -64,9 +67,9 @@ namespace Store.Controllers
 
         // PUT api/v1/items/{id}
         [HttpPut(ApiRoutes.Items.Update)]
-        public ActionResult UpdateItem([FromRoute] int id, [FromBody] ItemUpdateDto itemUpdateDto)
+        public async Task<ActionResult> UpdateItem([FromRoute] Guid id, [FromBody] ItemUpdateDto itemUpdateDto)
         {
-            var item = _itemService.GetItem(id);
+            var item = await _itemService.GetItemAsync(id);
 
             if(item == null)
             {
@@ -74,17 +77,16 @@ namespace Store.Controllers
             }
 
             _mapper.Map(itemUpdateDto, item);
-            _itemService.UpdateItem(item);
+            await _itemService.UpdateItemAsync(item);
 
-            _itemService.SaveChanges();
             return NoContent();
         }
 
         // PATCH api/v1/items/{id}
         [HttpPatch(ApiRoutes.Items.PartialUpdate)]
-        public  ActionResult PartialItemUpdate([FromRoute] int id, [FromBody] JsonPatchDocument<ItemUpdateDto> patchDocument)
+        public async Task<ActionResult> PartialItemUpdate([FromRoute] Guid id, [FromBody] JsonPatchDocument<ItemUpdateDto> patchDocument)
         {
-            var item = _itemService.GetItem(id);
+            var item = await _itemService.GetItemAsync(id);
 
             if(item == null)
             {
@@ -102,25 +104,23 @@ namespace Store.Controllers
 
             _mapper.Map(itemToPatch, item);
 
-            _itemService.UpdateItem(item);
-            _itemService.SaveChanges();
+            await _itemService.UpdateItemAsync(item);
 
             return NoContent();
         }
 
         // DELETE api/v1/items/{id}
         [HttpDelete(ApiRoutes.Items.Delete)]
-        public ActionResult DeleteItem([FromRoute] int id)
+        public async Task<ActionResult> DeleteItem([FromRoute] Guid id)
         {
-            var item = _itemService.GetItem(id);
+            var item = await _itemService.GetItemAsync(id);
 
             if(item == null)
             {
                 return NotFound();
             }
 
-            _itemService.DeleteItem(item);
-            _itemService.SaveChanges();
+            await _itemService.DeleteItemAsync(item);
 
             return NoContent();
         }
