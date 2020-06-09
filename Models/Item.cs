@@ -1,8 +1,9 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace Store.Models {
-    public class Item {
-
+namespace Store.Models
+{
+    public class Item 
+    {
         [Key]
         public int Id { get; set; }
 
