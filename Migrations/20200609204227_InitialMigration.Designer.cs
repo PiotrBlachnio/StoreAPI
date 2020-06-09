@@ -10,8 +10,8 @@ using Store.Database;
 namespace Store.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    [Migration("20200609193902_UpdateIdType")]
-    partial class UpdateIdType
+    [Migration("20200609204227_InitialMigration")]
+    partial class InitialMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {

@@ -1,6 +1,8 @@
 using AutoMapper;
 using Store.Dtos;
 using Store.Database.Models;
+using Store.Contracts.Responses;
+using Store.Contracts.Requests;
 
 namespace Store.Profiles
 {
@@ -8,10 +10,9 @@ namespace Store.Profiles
     {
         public ItemsProfile()
         {
-            CreateMap<Item, ItemReadDto>();
-            CreateMap<ItemCreateDto, Item>();
-            CreateMap<ItemUpdateDto, Item>();
-            CreateMap<Item, ItemUpdateDto>();
+            CreateMap<Item, ItemResponse>();
+            CreateMap<CreateItemRequest, Item>();
+            CreateMap<UpdateItemRequest, Item>();
         }
     }
 }

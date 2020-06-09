@@ -9,7 +9,7 @@ using Store.Database;
 namespace Store.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class StoreContextModelSnapshot : ModelSnapshot
+    partial class DatabaseContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
         {
