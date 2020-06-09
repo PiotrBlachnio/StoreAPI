@@ -3,6 +3,7 @@ using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Store.Data;
+using Store.Services;
 
 namespace Store.Installers
 {
@@ -12,6 +13,8 @@ namespace Store.Installers
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IItemRepo, SqlItemRepo>();
+
+            services.AddScoped<IItemService, ItemService>();
         }
     }
 }

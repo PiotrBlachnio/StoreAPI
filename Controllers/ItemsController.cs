@@ -18,9 +18,9 @@ namespace Store.Controllers
         public ItemsController(IItemService itemService, IMapper mapper) 
         {
 
-            //TODO: Services instead of repositories
             //TODO: Add async methods
             //TODO: Implement DTO's from contracts
+            //TODO: Add localization for get requests
             _itemService = itemService;
             _mapper = mapper;
         }
@@ -36,7 +36,7 @@ namespace Store.Controllers
 
         // GET api/v1/items/{id}
         [HttpGet(ApiRoutes.Items.Get, Name = "Get")]
-        public ActionResult <ItemReadDto> Get(int id)
+        public ActionResult <ItemReadDto> Get([FromRoute] int id)
         {
             var item = _itemService.GetItem(id);
 
@@ -50,7 +50,7 @@ namespace Store.Controllers
 
         // POST api/v1/items
         [HttpPost(ApiRoutes.Items.Create)]
-        public ActionResult <ItemReadDto> CreateItem(ItemCreateDto input)
+        public ActionResult <ItemReadDto> CreateItem([FromBody] ItemCreateDto input)
         {
             var item = _mapper.Map<Item>(input);
 
@@ -64,7 +64,7 @@ namespace Store.Controllers
 
         // PUT api/v1/items/{id}
         [HttpPut(ApiRoutes.Items.Update)]
-        public ActionResult UpdateItem(int id, ItemUpdateDto itemUpdateDto)
+        public ActionResult UpdateItem([FromRoute] int id, [FromBody] ItemUpdateDto itemUpdateDto)
         {
             var item = _itemService.GetItem(id);
 
@@ -82,7 +82,7 @@ namespace Store.Controllers
 
         // PATCH api/v1/items/{id}
         [HttpPatch(ApiRoutes.Items.PartialUpdate)]
-        public  ActionResult PartialItemUpdate(int id, JsonPatchDocument<ItemUpdateDto> patchDocument)
+        public  ActionResult PartialItemUpdate([FromRoute] int id, [FromBody] JsonPatchDocument<ItemUpdateDto> patchDocument)
         {
             var item = _itemService.GetItem(id);
 
@@ -110,7 +110,7 @@ namespace Store.Controllers
 
         // DELETE api/v1/items/{id}
         [HttpDelete(ApiRoutes.Items.Delete)]
-        public ActionResult DeleteItem(int id)
+        public ActionResult DeleteItem([FromRoute] int id)
         {
             var item = _itemService.GetItem(id);
 
