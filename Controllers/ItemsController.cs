@@ -20,8 +20,6 @@ namespace Store.Controllers
 
         public ItemsController(IItemService itemService, IMapper mapper) 
         {
-
-            //TODO: Add localization for update requests
             _itemService = itemService;
             _mapper = mapper;
         }
