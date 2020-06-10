@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Store.Contracts.Requests;
+using Store.Contracts.Responses;
 using Store.Services;
 
 namespace Store.Controllers
@@ -18,6 +19,19 @@ namespace Store.Controllers
         public async Task<ActionResult> Register([FromBody] UserRegistrationRequest request)
         {
             var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
+
+            if(!authResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+
+            return Ok(new AuthSuccessResponse
+            {
+                Token = authResponse.Token
+            });
         }
     }
 }
