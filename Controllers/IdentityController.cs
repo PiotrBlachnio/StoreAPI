@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Store.Contracts;
 using Store.Contracts.Requests;
 using Store.Contracts.Responses;
 using Store.Services;
@@ -16,6 +17,7 @@ namespace Store.Controllers
         }
 
         // POST /api/v1/identity/register
+        [HttpPost(ApiRoutes.Identity.Register)]
         public async Task<ActionResult> Register([FromBody] UserRegistrationRequest request)
         {
             var authResponse = await _identityService.RegisterAsync(request.Email, request.Password);
