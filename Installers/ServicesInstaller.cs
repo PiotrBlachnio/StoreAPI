@@ -12,6 +12,7 @@ namespace Store.Installers
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddScoped<IItemService, ItemService>();
+            services.AddScoped<IIdentityService, IdentityService>();
         }
     }
 }
