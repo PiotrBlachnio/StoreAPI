@@ -1,5 +1,4 @@
 using AutoMapper;
-using Store.Dtos;
 using Store.Database.Models;
 using Store.Contracts.Responses;
 using Store.Contracts.Requests;
@@ -13,6 +12,7 @@ namespace Store.Profiles
             CreateMap<Item, ItemResponse>();
             CreateMap<CreateItemRequest, Item>();
             CreateMap<UpdateItemRequest, Item>();
+            CreateMap<Item, UpdateItemRequest>();
         }
     }
 }

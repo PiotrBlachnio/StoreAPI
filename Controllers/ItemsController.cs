@@ -8,6 +8,7 @@ using System;
 using System.Threading.Tasks;
 using Store.Contracts.Responses;
 using Store.Contracts.Requests;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace Store.Controllers
 {
@@ -21,7 +22,6 @@ namespace Store.Controllers
         {
 
             //TODO: Add localization for update requests
-            //TODO: Update patch method
             _itemService = itemService;
             _mapper = mapper;
         }
@@ -83,32 +83,26 @@ namespace Store.Controllers
         }
 
         // PATCH api/v1/items/{id}
-        //! To fix
-        // [HttpPatch(ApiRoutes.Items.PartialUpdate)]
-        // public async Task<ActionResult> PartialItemUpdate([FromRoute] Guid id, [FromBody] JsonPatchDocument<ItemUpdateDto> patchDocument)
-        // {
-        //     var item = await _itemService.GetItemAsync(id);
+        [HttpPatch(ApiRoutes.Items.PartialUpdate)]
+        public async Task<ActionResult> PartialItemUpdate([FromRoute] Guid id, [FromBody] JsonPatchDocument<UpdateItemRequest> patchDocument)
+        {
+            var item = await _itemService.GetItemAsync(id);
 
-        //     if(item == null)
-        //     {
-        //         return NotFound();
-        //     }
+            if(item == null)
+            {
+                return NotFound();
+            }
 
-        //     var itemToPatch = _mapper.Map<ItemUpdateDto>(item);
+            var itemToPatch = _mapper.Map<UpdateItemRequest>(item);
 
-        //     patchDocument.ApplyTo(itemToPatch, ModelState);
+            patchDocument.ApplyTo(itemToPatch, ModelState);
 
-        //     if(!TryValidateModel(itemToPatch))
-        //     {
-        //         return ValidationProblem(ModelState);
-        //     }
+            _mapper.Map(itemToPatch, item);
 
-        //     _mapper.Map(itemToPatch, item);
+            await _itemService.UpdateItemAsync(item);
 
-        //     await _itemService.UpdateItemAsync(item);
-
-        //     return NoContent();
-        // }
+            return NoContent();
+        }
 
         // DELETE api/v1/items/{id}
         [HttpDelete(ApiRoutes.Items.Delete)]
