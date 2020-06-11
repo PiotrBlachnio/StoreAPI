@@ -22,34 +22,8 @@ namespace Store.Services
             _jwtSettings = jwtSettings;
         }
         
-        public async Task<AuthenticationResult> RegisterAsync(string email, string password)
+        private AuthenticationResult GenerateAuthenticationResult(IdentityUser newUser)
         {
-            var existingUser = await _userManager.FindByEmailAsync(email);
-
-            if(existingUser != null)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = new[] {"User with this address email already exists!"}
-                };
-            }
-
-            var newUser = new IdentityUser
-            {
-                Email = email,
-                UserName = email
-            };
-
-            var createdUser = await _userManager.CreateAsync(newUser, password);
-
-            if(!createdUser.Succeeded)
-            {
-                return new AuthenticationResult
-                {
-                    Errors = createdUser.Errors.Select(x => x.Description)
-                };
-            }
-
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
 
@@ -73,6 +47,63 @@ namespace Store.Services
                 Success = true,
                 Token = tokenHandler.WriteToken(token)
             };
+        }
+
+        public async Task<AuthenticationResult> RegisterAsync(string email, string password)
+        {
+            var existingUser = await _userManager.FindByEmailAsync(email);
+
+            if(existingUser != null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] {"User with this address email already exists"}
+                };
+            }
+
+            var newUser = new IdentityUser
+            {
+                Email = email,
+                UserName = email
+            };
+
+            var createdUser = await _userManager.CreateAsync(newUser, password);
+
+            if(!createdUser.Succeeded)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = createdUser.Errors.Select(x => x.Description)
+                };
+            }
+
+            return GenerateAuthenticationResult(newUser);
+        }
+
+        public async Task<AuthenticationResult> LoginAsync(string email, string password)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            if(user == null)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] {"User does not exist"}
+                };
+            }
+
+            var userHasValidPassword = await _userManager.CheckPasswordAsync(user, password);
+
+
+            if(!userHasValidPassword)
+            {
+                return new AuthenticationResult
+                {
+                    Errors = new[] {"Password is not valid"}
+                };
+            }
+
+            return GenerateAuthenticationResult(user);
         }
     }
 }

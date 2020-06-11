@@ -9,10 +9,13 @@ using System.Threading.Tasks;
 using Store.Contracts.Responses;
 using Store.Contracts.Requests;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Store.Controllers
 {
     [Produces("application/json")]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ItemsController : ControllerBase 
     {
         private readonly IItemService _itemService;

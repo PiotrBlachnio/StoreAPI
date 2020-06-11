@@ -35,5 +35,25 @@ namespace Store.Controllers
                 Token = authResponse.Token
             });
         }
+
+        // POST /api/v1/identity/login
+        [HttpPost(ApiRoutes.Identity.Login)]
+        public async Task<ActionResult> Login([FromBody] UserLoginRequest request)
+        {
+            var authResponse = await _identityService.LoginAsync(request.Email, request.Password);
+
+            if(!authResponse.Success)
+            {
+                return BadRequest(new AuthFailedResponse
+                {
+                    Errors = authResponse.Errors
+                });
+            }
+
+            return Ok(new AuthSuccessResponse
+            {
+                Token = authResponse.Token
+            });
+        }
     }
 }
