@@ -16,5 +16,7 @@ namespace Store.Services
         Task<bool> UpdateItemAsync(Item item);
         
         Task<bool> DeleteItemAsync(Item item);
+
+        Task<bool> UserOwnsItemAsync(Guid itemId, string userId);
     }
 }

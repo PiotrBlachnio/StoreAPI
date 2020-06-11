@@ -11,9 +11,12 @@ using Store.Contracts.Requests;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Store.Extensions;
 
 namespace Store.Controllers
 {
+    //TODO: Change DTO's to display userId
+    
     [Produces("application/json")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ItemsController : ControllerBase 
@@ -55,6 +58,7 @@ namespace Store.Controllers
         public async Task<ActionResult> CreateItem([FromBody] CreateItemRequest input)
         {
             var item = _mapper.Map<Item>(input);
+            item.UserId = HttpContext.GetUserId();
 
             await _itemService.CreateItemAsync(item);
 
@@ -70,6 +74,13 @@ namespace Store.Controllers
         [HttpPut(ApiRoutes.Items.Update)]
         public async Task<ActionResult> UpdateItem([FromRoute] Guid id, [FromBody] UpdateItemRequest input)
         {
+            var userOwnsItem = await _itemService.UserOwnsItemAsync(id, HttpContext.GetUserId());
+
+            if(!userOwnsItem)
+            {
+                return BadRequest(new { error = "You do not own this item" });
+            }
+            
             var item = await _itemService.GetItemAsync(id);
 
             if(item == null)
@@ -87,6 +98,13 @@ namespace Store.Controllers
         [HttpPatch(ApiRoutes.Items.PartialUpdate)]
         public async Task<ActionResult> PartialItemUpdate([FromRoute] Guid id, [FromBody] JsonPatchDocument<UpdateItemRequest> patchDocument)
         {
+            var userOwnsItem = await _itemService.UserOwnsItemAsync(id, HttpContext.GetUserId());
+
+            if(!userOwnsItem)
+            {
+                return BadRequest(new { error = "You do not own this item" });
+            }
+
             var item = await _itemService.GetItemAsync(id);
 
             if(item == null)
@@ -109,6 +127,13 @@ namespace Store.Controllers
         [HttpDelete(ApiRoutes.Items.Delete)]
         public async Task<ActionResult> DeleteItem([FromRoute] Guid id)
         {
+            var userOwnsItem = await _itemService.UserOwnsItemAsync(id, HttpContext.GetUserId());
+
+            if(!userOwnsItem)
+            {
+                return BadRequest(new { error = "You do not own this item" });
+            }
+
             var item = await _itemService.GetItemAsync(id);
 
             if(item == null)

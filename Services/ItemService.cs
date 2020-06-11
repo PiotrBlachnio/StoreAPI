@@ -52,5 +52,22 @@ namespace Store.Services
 
             return deleted > 0;
         }
+
+        public async Task<bool> UserOwnsItemAsync(Guid itemId, string userId)
+        {
+            var item = await _context.Items.AsNoTracking().SingleOrDefaultAsync(x => x.Id == itemId);
+
+            if(item == null)
+            {
+                return false;
+            }
+
+            if(item.UserId != userId)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
