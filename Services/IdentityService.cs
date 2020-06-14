@@ -159,11 +159,8 @@ namespace Store.Services
             }
 
             var expiryDateUnix = long.Parse(validatedToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Exp).Value);
-
-            var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc)
-                .AddSeconds(expiryDateUnix)
-                .Subtract(_jwtSettings.TokenLifetime);
-            
+            var expiryDateTimeUtc = new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc).AddSeconds(expiryDateUnix);
+                
             if(expiryDateTimeUtc > DateTime.UtcNow)
             {
                 return new AuthenticationResult { Errors = new [] {"Token hasn't expired yet"}};
