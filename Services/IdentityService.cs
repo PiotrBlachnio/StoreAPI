@@ -28,7 +28,7 @@ namespace Store.Services
             _context = databaseContext;
         }
         
-        private AuthenticationResult GenerateAuthenticationResult(IdentityUser user)
+        private async Task<AuthenticationResult> GenerateAuthenticationResultAsync(IdentityUser user)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_jwtSettings.Secret);
@@ -47,11 +47,22 @@ namespace Store.Services
             };
 
             var token = tokenHandler.CreateToken(tokenDescriptor);
+            var refreshToken = new RefreshToken
+            {
+                JwtId = token.Id,
+                UserId = user.Id,
+                CreationDate = DateTime.UtcNow,
+                ExpiryDate = DateTime.UtcNow.AddMonths(6)
+            };
+
+            await _context.RefreshTokens.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
 
             return new AuthenticationResult
             {
                 Success = true,
-                Token = tokenHandler.WriteToken(token)
+                Token = tokenHandler.WriteToken(token),
+                RefreshToken = refreshToken.Token
             };
         }
 
@@ -109,7 +120,7 @@ namespace Store.Services
                 };
             }
 
-            return GenerateAuthenticationResult(newUser);
+            return await GenerateAuthenticationResultAsync(newUser);
         }
 
         public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -135,7 +146,7 @@ namespace Store.Services
                 };
             }
 
-            return GenerateAuthenticationResult(user);
+            return await GenerateAuthenticationResultAsync(user);
         }
 
         public async Task<AuthenticationResult> RefreshTokenAsync(string token, string refreshToken)
@@ -194,7 +205,7 @@ namespace Store.Services
 
             var user = await _userManager.FindByIdAsync(validatedToken.Claims.Single(x => x.Type == "id").Value);
 
-            return GenerateAuthenticationResult(user);
+            return await GenerateAuthenticationResultAsync(user);
         }
     }
 }
