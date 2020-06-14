@@ -9,5 +9,7 @@ namespace Store.Database
         public DatabaseContext(DbContextOptions<DatabaseContext> opt): base(opt) {}
 
         public DbSet<Item> Items { get; set; }
+
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
     }
 }
