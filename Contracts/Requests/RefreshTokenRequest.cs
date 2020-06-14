@@ -1,6 +1,6 @@
-namespace Store.Contracts.Responses
+namespace Store.Contracts.Requests
 {
-    public class AuthSuccessResponse
+    public class RefreshTokenRequest
     {
         public string Token { get; set; }
 
