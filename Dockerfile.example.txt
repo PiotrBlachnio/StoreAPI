@@ -6,19 +6,19 @@ ARG VERSION=1.0.0
 ENV STAGE=PRODUCTION
 ENV DB_CONNECTION_STRING=<Connection_String>
 
-COPY WorkoutPlanner.csproj /build/
+COPY Store.csproj /build/
 
-RUN dotnet restore ./build/WorkoutPlanner.csproj
+RUN dotnet restore ./build/Store.csproj
 
 COPY . ./build/
 
 WORKDIR /build/
 
-RUN dotnet publish ./WorkoutPlanner.csproj -c $BUILDCONFIG -o out /p:Version=$VERSION
+RUN dotnet publish ./Store.csproj -c $BUILDCONFIG -o out /p:Version=$VERSION
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-buster-slim AS base
 WORKDIR /app
 
 COPY --from=build /build/out .
 
-ENTRYPOINT [ "dotnet", "WorkoutPlanner.dll" ]
+ENTRYPOINT [ "dotnet", "Store.dll" ]
