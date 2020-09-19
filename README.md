@@ -1,5 +1,5 @@
-# Workout Planner
-REST API created using .NET Core framework. It allows you to store different items and edit them as you wish. You must register before getting access to the store. Authorization is based on JWT tokens. Data is stored using MSSQL
+# Store API
+REST API created using .NET Core framework. It allows you to store different items and edit them as you wish. You must register before getting access to the store. Authorization is based on JWT tokens. Data is stored using MSSQL.
 
 ## Technologies used
 * C#
