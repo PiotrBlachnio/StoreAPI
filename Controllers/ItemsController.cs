@@ -15,8 +15,6 @@ using Store.Extensions;
 
 namespace Store.Controllers
 {
-    //TODO: Change DTO's to display userId
-    
     [Produces("application/json")]
     [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ItemsController : ControllerBase 
