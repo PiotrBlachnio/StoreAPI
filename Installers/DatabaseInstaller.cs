@@ -1,3 +1,4 @@
+using System;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -11,7 +12,12 @@ namespace Store.Installers
     {
         public void InstallServices(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(configuration.GetConnectionString((string)"StoreConnection")));
+            string connectionString;
+
+            if(Environment.GetEnvironmentVariable("STAGE") == "PRODUCTION") connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+            else connectionString = configuration.GetConnectionString("StoreConnection");
+            
+            services.AddDbContext<DatabaseContext>(opt => opt.UseSqlServer(connectionString));
 
             services.AddDefaultIdentity<IdentityUser>()
             .AddRoles<IdentityRole>()
