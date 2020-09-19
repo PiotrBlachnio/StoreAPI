@@ -10,15 +10,9 @@ namespace Store
 {
     public class Startup
     {
-        public Startup(Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
+        public Startup(IConfiguration configuration)
         {
-            var filename = Environment.GetEnvironmentVariable("STAGE") == "PRODUCTION" ? "appsettings.Production.json" : "appsettings.json";
-
-            var builder = new ConfigurationBuilder()
-            .SetBasePath(env.ContentRootPath)
-            .AddJsonFile(filename, optional: true, reloadOnChange: true);
-
-            this.Configuration = builder.Build();
+            Configuration = configuration;
         }
 
         public IConfiguration Configuration { get; }
