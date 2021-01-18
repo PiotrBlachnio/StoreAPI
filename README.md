@@ -13,11 +13,11 @@ REST API created using .NET Core framework. It allows you to store different ite
 
 ****
 ```
-git clone https://github.com/PiotrBlachnio/Store-API.git
+git clone https://github.com/PiotrBlachnio/StoreAPI.git
 ```
 
 ```
-cd Store-API/
+cd StoreAPI/
 ```
 
 ```
@@ -34,11 +34,11 @@ docker-compose up
 ****
 
 ```
-git clone https://github.com/PiotrBlachnio/Store-API.git
+git clone https://github.com/PiotrBlachnio/StoreAPI.git
 ```
 
 ```
-cd Store-API/
+cd StoreAPI/
 ```
 
 ```
@@ -50,7 +50,7 @@ dotnet run
 ```
 
 ## Contributing
-1. Fork it (https://github.com/PiotrBlachnio/Store-API/fork)
+1. Fork it (https://github.com/PiotrBlachnio/StoreAPI/fork)
 1. Create your feature branch (git checkout -b feature/fooBar)
 1. Commit your changes (git commit -am 'Add some fooBar')
 1. Push to the branch (git push origin feature/fooBar)
